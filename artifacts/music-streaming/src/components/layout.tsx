@@ -33,9 +33,6 @@ export function Layout({ children }: { children: ReactNode }) {
         currentTrack ? "bottom-24 md:bottom-0" : "bottom-0"
       )}>
         <div className="hidden md:flex items-center gap-3 px-8 py-8 mb-8">
-          <div className="h-8 w-8 rounded bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-            <PlayCircle className="h-5 w-5 text-white" />
-          </div>
           <span className="font-bold text-xl tracking-tight">Ethereal</span>
         </div>
 
