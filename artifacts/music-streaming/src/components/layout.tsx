@@ -32,10 +32,6 @@ export function Layout({ children }: { children: ReactNode }) {
         "bottom-0 left-0 right-0 h-16 border-t flex items-center justify-around px-4",
         currentTrack ? "bottom-24 md:bottom-0" : "bottom-0"
       )}>
-        <div className="hidden md:flex items-center gap-3 px-8 py-8 mb-8">
-          <span className="font-bold text-xl tracking-tight">Ethereal</span>
-        </div>
-
         <ul className="flex md:flex-col gap-2 md:px-4 w-full md:w-auto justify-around md:justify-start">
           {navItems.map((item) => {
             const isActive = location === item.href || (item.href !== "/" && location.startsWith(item.href));
