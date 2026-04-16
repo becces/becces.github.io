@@ -3,20 +3,25 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Music streaming API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: tracks
+    description: Track operations
+  - name: albums
+    description: Album operations
+  - name: artist
+    description: Artist info
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +29,131 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /tracks:
+    get:
+      operationId: listTracks
+      tags: [tracks]
+      summary: List all tracks
+      parameters:
+        - name: albumId
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of tracks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Track"
+
+  /tracks/{id}:
+    get:
+      operationId: getTrack
+      tags: [tracks]
+      summary: Get a single track
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Track details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Track"
+        "404":
+          description: Not found
+
+  /albums:
+    get:
+      operationId: listAlbums
+      tags: [albums]
+      summary: List all albums
+      responses:
+        "200":
+          description: List of albums
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Album"
+
+  /albums/{id}:
+    get:
+      operationId: getAlbum
+      tags: [albums]
+      summary: Get album with tracks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Album with tracks
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlbumWithTracks"
+        "404":
+          description: Not found
+
+  /artist:
+    get:
+      operationId: getArtist
+      tags: [artist]
+      summary: Get artist profile info
+      responses:
+        "200":
+          description: Artist profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Artist"
+
+  /stats:
+    get:
+      operationId: getStats
+      tags: [artist]
+      summary: Get streaming stats summary
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stats"
+
+  /featured:
+    get:
+      operationId: getFeatured
+      tags: [tracks]
+      summary: Get featured/latest tracks
+      responses:
+        "200":
+          description: Featured tracks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Track"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +164,123 @@ components:
       required:
         - status
 
+    Track:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        albumId:
+          type: integer
+        albumTitle:
+          type: string
+        albumCoverUrl:
+          type: string
+        duration:
+          type: integer
+          description: Duration in seconds
+        trackNumber:
+          type: integer
+        audioUrl:
+          type: string
+        genre:
+          type: string
+        releaseYear:
+          type: integer
+      required:
+        - id
+        - title
+        - duration
+        - trackNumber
+        - audioUrl
+
+    Album:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        coverUrl:
+          type: string
+        releaseYear:
+          type: integer
+        genre:
+          type: string
+        trackCount:
+          type: integer
+        totalDuration:
+          type: integer
+      required:
+        - id
+        - title
+        - coverUrl
+        - releaseYear
+        - trackCount
+        - totalDuration
+
+    AlbumWithTracks:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        coverUrl:
+          type: string
+        releaseYear:
+          type: integer
+        genre:
+          type: string
+        tracks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Track"
+      required:
+        - id
+        - title
+        - coverUrl
+        - releaseYear
+        - tracks
+
+    Artist:
+      type: object
+      properties:
+        name:
+          type: string
+        bio:
+          type: string
+        avatarUrl:
+          type: string
+        genre:
+          type: string
+        location:
+          type: string
+        socialLinks:
+          type: object
+          properties:
+            instagram:
+              type: string
+            twitter:
+              type: string
+            youtube:
+              type: string
+      required:
+        - name
+        - bio
+        - avatarUrl
+
+    Stats:
+      type: object
+      properties:
+        totalTracks:
+          type: integer
+        totalAlbums:
+          type: integer
+        totalListens:
+          type: integer
+      required:
+        - totalTracks
+        - totalAlbums
+        - totalListens
