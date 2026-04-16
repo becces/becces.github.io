@@ -90,10 +90,6 @@ export default function About() {
           ) : stats ? (
             <div className="grid gap-4">
               <div className="bg-card/20 p-4 rounded-xl border border-white/5">
-                <div className="text-3xl font-bold text-primary mb-1">{stats.totalListens.toLocaleString()}</div>
-                <div className="text-sm text-muted-foreground uppercase tracking-wider">Total Streams</div>
-              </div>
-              <div className="bg-card/20 p-4 rounded-xl border border-white/5">
                 <div className="text-3xl font-bold text-foreground mb-1">{stats.totalTracks}</div>
                 <div className="text-sm text-muted-foreground uppercase tracking-wider">Tracks Released</div>
               </div>
