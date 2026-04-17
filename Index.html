@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Music Stream</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>My Personal Tunes</h1>
+            <p>A curated collection of my music</p>
+        </header>
+
+        <main>
+            <section class="playlist">
+                <h2>My Songs</h2>
+                <div id="song-list">
+                    <!-- Song items will be dynamically loaded here by JavaScript -->
+                </div>
+            </section>
+
+            <section class="now-playing">
+                <h2>Now Playing</h2>
+                <div class="player-controls">
+                    <img id="current-cover" src="assets/default-cover.png" alt="Album Cover" class="album-cover">
+                    <div class="track-info">
+                        <h3 id="current-title">No Song Selected</h3>
+                        <p id="current-artist">Artist: Your Name</p>
+                    </div>
+                    <div class="audio-controls">
+                        <button id="prev-btn" class="control-btn">&#9664;</button>
+                        <button id="play-pause-btn" class="control-btn play">&#9658;</button>
+                        <button id="next-btn" class="control-btn">&#9654;</button>
+                    </div>
+                    <div class="progress-container">
+                        <div id="progress-bar" class="progress-bar"></div>
+                    </div>
+                    <div class="time-display">
+                        <span id="current-time">0:00</span> / <span id="duration">0:00</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <audio id="audio-player"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
