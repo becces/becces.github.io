@@ -8,6 +8,7 @@ interface PlayerState {
   volume: number;
   currentTime: number;
   duration: number;
+  repeat: boolean;
 }
 
 interface PlayerContextType extends PlayerState {
@@ -17,6 +18,7 @@ interface PlayerContextType extends PlayerState {
   previousTrack: () => void;
   setVolume: (volume: number) => void;
   seek: (time: number) => void;
+  toggleRepeat: () => void;
 }
 
 const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
@@ -29,6 +31,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     volume: 1,
     currentTime: 0,
     duration: 0,
+    repeat: false,
   });
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -53,7 +56,12 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
 
     const handleTimeUpdate = () => setState(s => ({ ...s, currentTime: audio.currentTime }));
     const handleDurationChange = () => setState(s => ({ ...s, duration: audio.duration }));
-    const handleEnded = () => nextTrack();
+    const handleEnded = () => {
+      if (audio.loop) {
+        return;
+      }
+      nextTrack();
+    };
 
     audio.addEventListener('timeupdate', handleTimeUpdate);
     audio.addEventListener('durationchange', handleDurationChange);
@@ -132,6 +140,15 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const toggleRepeat = () => {
+    const audio = audioRef.current;
+    setState(s => {
+      const next = !s.repeat;
+      if (audio) audio.loop = next;
+      return { ...s, repeat: next };
+    });
+  };
+
   const setVolume = (volume: number) => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
@@ -156,6 +173,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         previousTrack,
         setVolume,
         seek,
+        toggleRepeat,
       }}
     >
       {children}
