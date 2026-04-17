@@ -1,6 +1,6 @@
 import { usePlayer } from "@/lib/player-context";
 import { Slider } from "@/components/ui/slider";
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Repeat } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function Player() {
@@ -10,11 +10,13 @@ export function Player() {
     currentTime,
     duration,
     volume,
+    repeat,
     togglePlayPause,
     nextTrack,
     previousTrack,
     setVolume,
     seek,
+    toggleRepeat,
   } = usePlayer();
 
   if (!currentTrack) return null;
@@ -62,6 +64,15 @@ export function Player() {
           </Button>
           <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" onClick={nextTrack}>
             <SkipForward className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`h-8 w-8 transition-colors ${repeat ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
+            onClick={toggleRepeat}
+            title={repeat ? "Repeat on" : "Repeat off"}
+          >
+            <Repeat className="h-4 w-4" />
           </Button>
         </div>
         
